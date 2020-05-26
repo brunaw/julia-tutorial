@@ -1,0 +1,443 @@
+---
+title: "Making Books with R Markdown"
+subtitle: "Meet bookdown"
+author: "Alison Hill"
+date: "2019/01/15 (updated: `r Sys.Date()`)"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/penguin.css", "css/fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: solarized-light
+      highlightLines: true
+      countIncrementalSlides: false
+      ratio: "16:9"
+      beforeInit: "https://platform.twitter.com/widgets.js"
+    seal: false 
+    includes:
+      in_header: header.html
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(knitr)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+                      echo = FALSE)
+# options(knitr.table.format = "html")
+library(tidyverse)
+
+```
+
+layout: true
+  
+<div class="my-footer"><span>https://github.com/brunaw/julia-tutorial</span></div>
+
+<!-- this adds the link footer to all slides, depends on my-footer class in css-->
+
+---
+name: bookdown-title
+background-image: url(img/julia.png)
+background-size: cover
+
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### .fancy[Introduction to Julia Programming]
+
+.large[Bruna Wundervald | Maynooth University | `r Sys.Date()`]
+
+<!-- this ends up being the title slide since seal = FALSE-->
+
+
+---
+exclude: true
+name: lifecycle
+
+individual files:
+
+.Rmd to .md (via knitr)
+
+.md to HTML (via pandoc)
+
+
+
+HTML to lots of HTML --> BOOK (via bookdown)
+
+---
+class: inverse, middle
+
+### .fancy[Roadmap]
+
+  - What is Julia
+  - Why should we care about Julia
+  - Introduction to Julia
+  - Julia for DS
+  - Julia for ML
+
+---
+
+# What is Julia
+
+- A 'new', open-source numeric programming language 
+  - Multi-paradigm: dynamically-typed, partially functional, and   partially object-oriented 
+  -  Designed for scientific and technical computing
+  
+- Reasonably easy to learn and high-performance (fast)
+- In constant development
+
+> **Emerging as one of the most important programming
+languages for DS & ML in the next years**
+
+.fancy[+pros]
+  - GPU Compatible
+  - Distributed and Parallel Computing Support
+
+---
+
+
+# R, python and Julia comparison
+
+
+Consider a hand implementation (code at: 
+[`R`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.R), 
+[`python`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.py), 
+[`Julia`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/em.jl)) of the 
+EM algorithm for the estimation of Gaussian Mixtures. 
+
+- I chose this algorithm because it involves many usual elements
+of scientific programming: loops, conditionals, matrix operations, sampling, etc. 
+
+.pull-left[
+```
+# Runs: Average 9 for each algorithm
+# Results: 
+#      - Julia apprx 243 times faster than R;
+#      - Julia apprx 75 times faster than Python;
+#  
+#--- Time ------- R ------- Python ------ Julia  ---#
+#  minimum: | 138.319 s  | 41.121  s |  535.408 ms  #
+#  median:  | 152.872 s  | 46.800  s |  599.821 ms  #
+#  mean:    | 152.534 s  | 46.705  s |  627.756 ms  #
+#  maximum :| 173.347 s  | 53.734  s |  802.406 ms  #
+#---------------------------------------------------#
+```
+]
+.pull-right[
+]
+---
+
+# Introduction to Julia: syntax
+
+- Julia needs to be installed [[link](https://julialang.org/downloads/)]
+- IDE: **Atom**, Juno, Jupyter Notebooks, etc (not working
+so well in RStudio *yet*)
+
+
+- Assignments with the '=' operator
+- All the usual math functions (+, -, /, exp, ^, cos, pi, ...)
+- All the usual booleans (==, !=, <, >, <=, >=, &&, ||, ...)
+- Conditionals: always have an `end`, e.g.
+
+.pull-left[
+```
+sum_for = 0;
+value = 3;
+for j in 1:5
+    if (value < 5)
+        sum_for += 1
+    elseif (value == 5)
+        sum_for += 2
+    else
+        sum_for = sum_for/2
+    end
+    global sum_for                  
+    global value = value^sum_for
+end
+```
+]
+.pull-right[
+
+- Variables inside the loop can't be accessed if they're
+not made `global`
+
+- `let` statements allocate new variable bindings each time they run:
+
+```
+let x = 1; z = 2;
+  print(x + z)
+end
+```
+
+where the variables `x` and `z` do not exist globally; 
+
+]
+
+---
+
+# Introduction to Julia: syntax
+
+- Objects: lists, arrays, vectors, [...]
+
+- Julia is very protective of it's base functions
+  - You can't overwrite functions like the `sum`, `exp`, etc
+  
+  
+
+
+.pull-left[
+
+### Functions
+
+
+- Syntax similar to `python`
+
+```
+function my_sum(x, y)
+    x + y
+end
+```
+*or* 
+```
+my_sum(x, y) = x + y
+```
+]
+
+.pull-right[
+
+- Package installation: `Pkg.add('pkg-name')`
+  - `Pkg.rm()`, `Pkg.clone()`, `Pkg.update()`, ...
+
+- Easy parallelization:
+
+```
+using Distributed # Package calling
+
+nheads = @distributed (+) for i in 1:2000
+  Int(rand(Bool))
+end    
+```
+
+]
+
+
+---
+
+# Introduction to Julia: plotting
+
+.pull-left[
+Packages:
+  - Plots
+  - StatsPlots
+  - Colors
+  - [GGPlots](https://github.com/JuliaPlots/GGPlots.jl)
+  - [PlotThemes](https://github.com/JuliaPlots/PlotThemes.jl)
+```
+using Plots
+using StatsPlots
+gr()
+x = 1:10; y = rand(10, 4)
+p1 = plot(x, y) # Line Plot
+p2 = scatter(x, y) # Scatter plot
+p3 = boxplot(y, xlabel = "This one is labelled", title = "Subtitle")
+p4 = histogram(y[:, 3]) # Histograms
+all_plots = plot(p1, p2, p3, p4, 
+             layout = (2, 2), legend = false)
+```
+
+
+]
+.pull-right[
+
+```{r}
+knitr::include_graphics("img/plots.png")
+```
+
+]
+
+---
+
+# Introduction to Julia: fancy plotting
+
+.pull-left[
+```
+using Plots
+default(legend = false)
+x = y = range(-5, 5, length = 40)
+zs = zeros(0, 40); n = 100
+
+my_gif = @animate for i in range(0, stop = 2π, length = n)
+    f(x, y) = sin(x + 10sin(i)) + cos(y)
+    # create a plot with 3 subplots and  custom layout
+    l = @layout [a{0.7w} b; c{0.2h}]
+    p = plot(x, y, f, st = [:surface, :contourf], 
+    layout = l)
+    # induce a slight oscillating camera angle sweep,
+    # in degrees (azimuth, altitude)
+    plot!(p[1], camera = (10 * (1 + cos(i)), 40)
+    # add a tracking line
+    fixed_x = zeros(40)
+    z = map(f, fixed_x, y)
+    plot!(p[1], fixed_x, y, z, line = (:black, 5, 0.2))
+    vline!(p[2], [0], line = (:black, 5))
+
+    # add to and show the tracked values over time
+    global zs = vcat(zs, z')
+    plot!(p[3], zs, alpha = 0.2, 
+    palette = cgrad(:blues).colors)
+end
+```
+]
+.pull-right[
+
+```{r}
+knitr::include_graphics("img/anim.gif")
+```
+
+]
+---
+
+# Julia for Data Science: `DataFrames` + `Queryverse`
+
+.pull-left[
+```
+using Query, DataFrames, RDatasets
+cars = dataset("datasets", "mtcars")
+
+df = cars |>
+  @filter(_.MPG > 15) |>
+  @groupby(_.Cyl) |>
+  @map({Key=key(_), Count=length(_)}) |>
+  DataFrame
+
+ df
+# 3×2 DataFrame
+# │ Row │ Key   │ Count │
+# │     │ Int64 │ Int64 │
+# ├────┼──────┼──────┤
+# │ 1   │ 6     │ 7     │
+# │ 2   │ 4     │ 11    │
+# │ 3   │ 8     │ 8     │
+```
+]
+
+.pull-right[
+
+- [Queryverse](https://github.com/queryverse/Queryverse.jl):
+a meta package that pulls together a 
+number of packages for handling data in Julia
+
+- Data manipulation & visualization, file loading, UI tools
+
+- Has both `SQL` & `tidyverse` elements
+
+- Can be used for various data types 
+(dataframes, arrays, indexed tables, etc)
+
+]
+
+---
+
+# Julia for Machine Learning: `MLJ` package
+
+
+
+.pull-left[ 
+
+```
+using MLJ, StatsBase, Random, CategoricalArrays, DataFrames
+using Plots
+using XGBoost, MLJ
+
+X, y = @load_crabs
+X = DataFrame(X)
+
+@load XGBoostClassifier
+xgb  = XGBoostClassifier()
+xgbm = machine(xgb, X, y)
+r = range(xgb, :num_round, lower=10, upper=500)
+curve = learning_curve!(xgbm, resampling=CV(),
+                        range=r, resolution=25,
+                        measure=cross_entropy)
+maximum(curve.measurements)
+
+plot_curve = plot(curve.parameter_values,
+    curve.measurements,
+    xlab=curve.parameter_name,
+    xscale=curve.parameter_scale,
+    ylab = "CV estimate of accuracy")
+
+```
+]
+
+
+.pull-right[
+
+```{r}
+knitr::include_graphics('img/curve.png')
+```
+
+]
+
+
+---
+
+# Julia for Machine Learning: `MLJ` package
+
+  - Data agnostic, train models on any data supported 
+  by the `Tables.jl` interface
+
+  - Extensive support for model composition,
+
+  - Convenient syntax to tune and evaluate models, 
+
+  - Consistent interface to handle probabilistic predictions
+
+.fancy[+Resources]
+
+- [Learning resources](https://julialang.org/learning/)
+- [Code snippets](https://github.com/brunaw/julia-tutorial/tree/master/code/snippets)
+
+- [List of packages](https://juliaobserver.com/packages)
+- [Julia course in Coursera](https://www.coursera.org/learn/julia-programming)
+
+- [Tutorials](https://github.com/JuliaComputing/JuliaBoxTutorials)
+
+
+---
+
+# .fancy[JuliaCon]
+
+> https://juliacon.org/2020/
+> Free registration!
+
+```{r}
+knitr::include_graphics("img/juliacon.png")
+```
+
+
+
+---
+
+
+class: bottom, center, inverse
+
+<font size="40">Thanks! </font>
+
+<p>
+
+
+<color="FFFFFF">  https://github.com/brunaw </color>
+ 
