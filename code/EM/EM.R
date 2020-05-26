@@ -76,6 +76,9 @@ compute_vlb <- function(X, pi, mu, sigma, gamma, C = 3){
       )
       
       gamma_c = gamma[n, c]
+      if(gamma_c == 0){ 
+        gamma_c = gamma_c + 0.00000001
+        }
       loss_here = (gamma_c * ((log(pi[c]) + logd) -
                                 log(gamma_c)))
       loss = loss + loss_here
@@ -99,7 +102,6 @@ train_EM <- function(X, C, rtol = 1e-3,
   best_sigma = NA
 
   for(i in 1:restarts){
-    print(i)
     pi = runif(C)
     pi = pi/sum(pi)
     mu = matrix(rnorm(C * d), nrow = C)
@@ -110,9 +112,8 @@ train_EM <- function(X, C, rtol = 1e-3,
     lloss = -Inf
     not_saturated = TRUE
     iteration = 0
-    #while (not_saturated & (iteration < max_iter)){
+
     for(j in 1:max_iter){
-      print(j)
       former_loss = lloss
       gamma <-  E_step(X, pi, mu, sigma)
       m <-  M_step(X, gamma)
@@ -122,7 +123,6 @@ train_EM <- function(X, C, rtol = 1e-3,
       lloss = compute_vlb(X, pi, mu, sigma, gamma)
       #if(former_loss > lloss) print("bug")
       not_saturated = abs((lloss/former_loss) - 1) > rtol
-      #iteration = iteration + 1
     }
     if(lloss > best_loss){
       best_loss = lloss
@@ -153,14 +153,9 @@ gamma %>%
   geom_point(aes(colour = key)) +
   theme_minimal()
 
-# best_pi = pi
-# best_mu = mu
-# best_sigma = sigma
-# end
-# end
-# return best_loss, best_pi, best_mu, best_sigma
-# end
+library(microbenchmark)
 
-
-
-
+microbenchmark(
+  train_EM(X, 3), 
+  times = 9
+)
