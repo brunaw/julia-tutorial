@@ -1,6 +1,8 @@
 ---
-title: "Julia Programming"
-author: "Bruna Wundervald"
+title: "Making Books with R Markdown"
+subtitle: "Meet bookdown"
+author: "Alison Hill"
+date: "2019/01/15 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
     css: ["default", "css/penguin.css", "css/fonts.css"]
@@ -216,10 +218,10 @@ where the variables `x` and `z` do not exist globally;
 .pull-left[
 
 - Objects: lists, arrays, vectors, strings, [...]
-  - But also more comprex types: composites (structures),
+  - But also more complex types: composites (structures),
   unions (of two different types), 
 
-- Julia is very protective of it's base functions
+- Julia is very protective of its base functions
   - You can't overwrite the `sum`, `exp`, etc
   
 
@@ -269,8 +271,7 @@ Packages:
   - [GGPlots](https://github.com/JuliaPlots/GGPlots.jl)
   - [PlotThemes](https://github.com/JuliaPlots/PlotThemes.jl)
 ```
-using Plots
-using StatsPlots
+using Plots, StatsPlots
 gr()
 x = 1:10; y = rand(10, 4)
 p1 = plot(x, y) # Line Plot
@@ -302,7 +303,7 @@ default(legend = false)
 x = y = range(-5, 5, length = 40)
 zs = zeros(0, 40); n = 100
 
-my_gif=@animate for i in range(0,stop = 2π,length = n)
+my_gif = @animate for i in range(0, stop = 2π, length = n)
     f(x, y) = sin(x + 10sin(i)) + cos(y)
     # create a plot with 3 subplots and  custom layout
     l = @layout [a{0.7w} b; c{0.2h}]
@@ -382,12 +383,11 @@ number of packages for handling data in Julia
 .pull-left[ 
 
 ```
-using MLJ, StatsBase, DataFrames
+using MLJ, StatsBase
 using Plots
-using XGBoost, MLJ
+using XGBoost
 
 X, y = @load_crabs
-X = DataFrame(X)
 
 @load XGBoostClassifier
 xgb  = XGBoostClassifier()

@@ -3,7 +3,7 @@
 ## [Presentation](http://brunaw.com/julia-tutorial/slides/julia.html)
 Roadmap
   - What is Julia
-  - Why should we care about Julia
+  - `R`, `python` and `Julia` comparison 
   - Introduction to Julia
   - Julia for DS
   - Julia for ML
