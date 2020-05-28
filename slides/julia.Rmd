@@ -1,8 +1,6 @@
 ---
-title: "Making Books with R Markdown"
-subtitle: "Meet bookdown"
-author: "Alison Hill"
-date: "2019/01/15 (updated: `r Sys.Date()`)"
+title: "Julia Programming"
+author: "Bruna Wundervald"
 output:
   xaringan::moon_reader:
     css: ["default", "css/penguin.css", "css/fonts.css"]
@@ -57,7 +55,7 @@ background-size: cover
 
 ### .fancy[Introduction to Julia Programming]
 
-.large[Bruna Wundervald | Maynooth University | `r Sys.Date()`]
+.large[Bruna Wundervald | Maynooth University | `r format(Sys.Date()+1, "%b %d, %Y")`]
 
 <!-- this ends up being the title slide since seal = FALSE-->
 
@@ -82,10 +80,16 @@ class: inverse, middle
 ### .fancy[Roadmap]
 
   - What is Julia
-  - Why should we care about Julia
+  
+  - **R**, **python** and **Julia** comparison
+  
   - Introduction to Julia
+  
   - Julia for DS
+  
   - Julia for ML
+  
+  > Find this talk at: http://brunaw.com/julia-tutorial/slides/julia.html
 
 ---
 
@@ -108,13 +112,13 @@ languages for DS & ML in the next years**
 ---
 
 
-# R, python and Julia comparison
+# `R`, `python` and `Julia` comparison
 
 
 Consider a hand implementation (code at: 
 [`R`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.R), 
 [`python`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.py), 
-[`Julia`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/em.jl)) of the 
+[`Julia`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.jl)) of the 
 EM algorithm for the estimation of Gaussian Mixtures. 
 
 - I chose this algorithm because it involves many usual elements
@@ -136,11 +140,18 @@ of scientific programming: loops, conditionals, matrix operations, sampling, etc
 ```
 ]
 .pull-right[
+
+```{r}
+knitr::include_graphics("https://media.giphy.com/media/ASvQ3A2Q7blzq/giphy.gif")
+```
+
+
 ]
 ---
 
 # Introduction to Julia: syntax
 
+.pull-left[
 - Julia needs to be installed [[link](https://julialang.org/downloads/)]
 - IDE: **Atom**, Juno, Jupyter Notebooks, etc (not working
 so well in RStudio *yet*)
@@ -151,7 +162,7 @@ so well in RStudio *yet*)
 - All the usual booleans (==, !=, <, >, <=, >=, &&, ||, ...)
 - Conditionals: always have an `end`, e.g.
 
-.pull-left[
+
 ```
 sum_for = 0;
 value = 3;
@@ -170,8 +181,20 @@ end
 ]
 .pull-right[
 
+
+> We can render math symbols as variable names in Julia:
+
+```
+α = 1
+β = 3
+exp(α + β)
+```
+
+<br>
+
+
 - Variables inside the loop can't be accessed if they're
-not made `global`
+not made `global` (unless the loop is inside a function)
 
 - `let` statements allocate new variable bindings each time they run:
 
@@ -189,24 +212,24 @@ where the variables `x` and `z` do not exist globally;
 
 # Introduction to Julia: syntax
 
-- Objects: lists, arrays, vectors, [...]
-
-- Julia is very protective of it's base functions
-  - You can't overwrite functions like the `sum`, `exp`, etc
-  
-  
-
 
 .pull-left[
+
+- Objects: lists, arrays, vectors, strings, [...]
+  - But also more comprex types: composites (structures),
+  unions (of two different types), 
+
+- Julia is very protective of it's base functions
+  - You can't overwrite the `sum`, `exp`, etc
+  
+
 
 ### Functions
 
 
-- Syntax similar to `python`
-
 ```
-function my_sum(x, y)
-    x + y
+function my_sum(x::Float64, y::Float64) 
+    x + y                               
 end
 ```
 *or* 
@@ -217,6 +240,7 @@ my_sum(x, y) = x + y
 
 .pull-right[
 
+### Other useful functions
 - Package installation: `Pkg.add('pkg-name')`
   - `Pkg.rm()`, `Pkg.clone()`, `Pkg.update()`, ...
 
@@ -278,7 +302,7 @@ default(legend = false)
 x = y = range(-5, 5, length = 40)
 zs = zeros(0, 40); n = 100
 
-my_gif = @animate for i in range(0, stop = 2π, length = n)
+my_gif=@animate for i in range(0,stop = 2π,length = n)
     f(x, y) = sin(x + 10sin(i)) + cos(y)
     # create a plot with 3 subplots and  custom layout
     l = @layout [a{0.7w} b; c{0.2h}]
@@ -346,6 +370,7 @@ number of packages for handling data in Julia
 - Can be used for various data types 
 (dataframes, arrays, indexed tables, etc)
 
+- Other functions: `select()`, `where()`, `orderby()`, [...]
 ]
 
 ---
@@ -357,7 +382,7 @@ number of packages for handling data in Julia
 .pull-left[ 
 
 ```
-using MLJ, StatsBase, Random, CategoricalArrays, DataFrames
+using MLJ, StatsBase, DataFrames
 using Plots
 using XGBoost, MLJ
 
@@ -371,7 +396,6 @@ r = range(xgb, :num_round, lower=10, upper=500)
 curve = learning_curve!(xgbm, resampling=CV(),
                         range=r, resolution=25,
                         measure=cross_entropy)
-maximum(curve.measurements)
 
 plot_curve = plot(curve.parameter_values,
     curve.measurements,
