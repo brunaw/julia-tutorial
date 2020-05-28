@@ -388,6 +388,7 @@ using Plots
 using XGBoost
 
 X, y = @load_crabs
+X = DataFrame(X)
 
 @load XGBoostClassifier
 xgb  = XGBoostClassifier()
