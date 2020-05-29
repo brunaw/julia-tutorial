@@ -189,3 +189,4 @@ for i in range(1, 10):
 
 [min(total_time), np.median(total_time), np.mean(total_time), max(total_time)]
 # [41.121864795684814, 46.80030274391174, 46.705216566721596, 53.73479151725769] s
+#---
