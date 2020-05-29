@@ -1,8 +1,6 @@
 ---
-title: "Making Books with R Markdown"
-subtitle: "Meet bookdown"
-author: "Alison Hill"
-date: "2019/01/15 (updated: `r Sys.Date()`)"
+title: "Julia Introduction"
+author: "Bruna Wundervald"
 output:
   xaringan::moon_reader:
     css: ["default", "css/penguin.css", "css/fonts.css"]
