@@ -57,7 +57,7 @@ background-size: cover
 
 ### .fancy[Introduction to Julia Programming]
 
-.large[Bruna Wundervald | Maynooth University | `r format(Sys.Date()+1, "%b %d, %Y")`]
+.large[Bruna Wundervald | Maynooth University | `r format(Sys.Date(), "%b %d, %Y")`]
 
 <!-- this ends up being the title slide since seal = FALSE-->
 
