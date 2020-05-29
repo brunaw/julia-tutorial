@@ -119,7 +119,7 @@ languages for DS & ML in the next years**
 
 Consider a hand implementation (code at: 
 [`R`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.R), 
-[`python`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.py), 
+[`python`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/em.py), 
 [`Julia`](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/EM.jl)) of the 
 EM algorithm for the estimation of Gaussian Mixtures. 
 
