@@ -206,9 +206,6 @@ where the variables `x` and `z` do not exist globally;
   - But also more complex types: composites (structures),
   unions (of two different types), 
 
-- Julia is very protective of its base functions
-  - You can't overwrite the `sum`, `exp`, etc
-  
 
 
 ### Functions
@@ -261,7 +258,8 @@ gr()
 x = 1:10; y = rand(10, 4)
 p1 = plot(x, y) # Line Plot
 p2 = scatter(x, y) # Scatter plot
-p3 = boxplot(y, xlabel = "This one is labelled", title = "Subtitle")
+p3 = boxplot(y, xlabel = "This one is labelled", 
+title = "Subtitle")
 p4 = histogram(y[:, 3]) # Histograms
 all_plots = plot(p1, p2, p3, p4, 
              layout = (2, 2), legend = false)
@@ -286,7 +284,7 @@ default(legend = false)
 x = y = range(-5, 5, length = 40)
 zs = zeros(0, 40); n = 100
 
-my_gif = @animate for i in range(0, stop = 2π, length = n)
+my_gif =@animate for i in range(0, stop=2π, length=n)
     f(x, y) = sin(x + 10sin(i)) + cos(y)
     # create a plot with 3 subplots and  custom layout
     l = @layout [a{0.7w} b; c{0.2h}]
