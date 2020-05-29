@@ -19,3 +19,6 @@ Roadmap
 - [Julia course in Coursera](https://www.coursera.org/learn/julia-programming)
 
 - [Tutorials](https://github.com/JuliaComputing/JuliaBoxTutorials)
+
+
+Slides theme based on: https://github.com/rstudio-education/arm-workshop-rsc2019/tree/36f9665c8fb0b5cc0213a6c0786b6a1f8d0290fb/static/slides
