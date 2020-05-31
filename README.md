@@ -31,7 +31,7 @@ Code at:
 
 ### Update: 31 May 2020
 
-Now we also have an optimized version of the python code at [this link](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/em_numba.py) using numba's just-in-time compilation, adapted by @luk-f-a. Please see
+Now we also have an optimized version of the python code at [this link](https://github.com/brunaw/julia-tutorial/blob/master/code/EM/em_numba.py) using numba's just-in-time compilation, adapted by [@luk-f-a](https://github.com/luk-f-a). Please see
 [the pull request description](https://github.com/brunaw/julia-tutorial/pull/2) for details on the changes and the perfomance of the adapted code. 
 
 ## Useful Links
