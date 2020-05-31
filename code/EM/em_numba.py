@@ -17,7 +17,7 @@ import pandas as pd
 # mu0 = samples['mu0']         # The start values for \mu_c
 # sigma0 = samples['sigma0']   # Covariance matrix between the clusters
 
-df = pd.read_csv('samples.txt', index_col=0, sep=" ")
+df = pd.read_csv('code/EM/samples.txt', index_col=0, sep=" ")
 # print(df)
 X = df.values
 pi = np.array([0.34518140, 0.6066179, 0.04820071])  # The priors for the mixture proportions
